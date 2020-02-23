@@ -44,7 +44,7 @@ function Cart({ cart, total, removeFromCart, updateAmount }) {
               </td>
               <td>
                 <strong>{product.title}</strong>
-                <span>{product.formattePrice}</span>
+                <span>{product.formattedPrice}</span>
               </td>
               <td>
                 <div>
