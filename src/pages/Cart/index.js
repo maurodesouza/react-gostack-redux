@@ -25,7 +25,7 @@ function Cart({ cart, dispatch }) {
         </thead>
         <tbody>
           {cart.map(product => (
-            <tr>
+            <tr key={product.id}>
               <td>
                 <img src={product.image} alt={product.title} />
               </td>
@@ -75,7 +75,7 @@ function Cart({ cart, dispatch }) {
 }
 
 Cart.propTypes = {
-  cart: PropTypes.shape([]).isRequired,
+  cart: PropTypes.instanceOf(Array).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
