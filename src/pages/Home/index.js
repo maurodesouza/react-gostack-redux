@@ -30,7 +30,7 @@ class Home extends Component {
 
   render() {
     const { products } = this.state;
-    const { addToCart, amount } = this.props;
+    const { addToCartRequest, amount } = this.props;
 
     return (
       <ProductList>
@@ -39,7 +39,7 @@ class Home extends Component {
             <img src={product.image} alt={product.title} />
             <strong>{product.title}</strong>
             <span>{product.formattedPrice}</span>
-            <button type="button" onClick={() => addToCart(product)}>
+            <button type="button" onClick={() => addToCartRequest(product.id)}>
               <div>
                 <MdAddShoppingCart size={16} color="#fff" />{' '}
                 {amount[product.id] || 0}
@@ -54,7 +54,7 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  addToCart: PropTypes.func.isRequired,
+  addToCartRequest: PropTypes.func.isRequired,
   amount: PropTypes.instanceOf(Object).isRequired,
 };
 
