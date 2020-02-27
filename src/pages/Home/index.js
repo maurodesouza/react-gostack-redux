@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { MdAddShoppingCart } from 'react-icons/md';
 import { ProductList } from './styles';
@@ -10,9 +8,19 @@ import { ProductList } from './styles';
 import api from '../../services/api';
 import { formatPrice } from '../../util/format';
 
-import * as CartActions from '../../store/modules/cart/actions';
+import { addToCartRequest } from '../../store/modules/cart/actions';
 
-const Home = ({ amount, addToCartRequest }) => {
+const Home = () => {
+  const amount = useSelector(state =>
+    state.cart.reduce((sumAmount, product) => {
+      sumAmount[product.id] = product.amount;
+
+      return sumAmount;
+    }, {})
+  );
+
+  const dispatch = useDispatch();
+
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -28,7 +36,7 @@ const Home = ({ amount, addToCartRequest }) => {
     };
 
     loadProducts();
-  });
+  }, []);
 
   return (
     <ProductList>
@@ -37,7 +45,10 @@ const Home = ({ amount, addToCartRequest }) => {
           <img src={product.image} alt={product.title} />
           <strong>{product.title}</strong>
           <span>{product.formattedPrice}</span>
-          <button type="button" onClick={() => addToCartRequest(product.id)}>
+          <button
+            type="button"
+            onClick={() => dispatch(addToCartRequest(product.id))}
+          >
             <div>
               <MdAddShoppingCart size={16} color="#fff" />{' '}
               {amount[product.id] || 0}
@@ -50,20 +61,4 @@ const Home = ({ amount, addToCartRequest }) => {
   );
 };
 
-Home.propTypes = {
-  addToCartRequest: PropTypes.func.isRequired,
-  amount: PropTypes.instanceOf(Object).isRequired,
-};
-
-const mapStateToProps = state => ({
-  amount: state.cart.reduce((amount, product) => {
-    amount[product.id] = product.amount;
-
-    return amount;
-  }, {}),
-});
-
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(CartActions, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;
